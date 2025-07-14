@@ -98,8 +98,18 @@ def is_terminal_node(board):
 
 def minimax(board, depth, alpha, beta, maximizingPlayer):
     """
-    Here we finally call on the minimax algorith.
-    This is a recursive version with Alpha-Beta pruning.
+        Here we finally call on the minimax algorith.
+        This is a recursive version with Alpha-Beta pruning.
+
+    Args:
+        board (np.array): Current board state
+        depth (int): How many moves ahead to search
+        alpha (float): Alpha value for pruning
+        beta (float): Beta value for pruning
+        maximizingPlayer (bool): True if AI's turn
+
+    Returns:
+        (int, float): Best column to move and its score
     """
     valid_locations = get_valid_locations(board)
     terminal = is_terminal_node(board)
@@ -108,12 +118,14 @@ def minimax(board, depth, alpha, beta, maximizingPlayer):
     if depth == 0 or terminal:
         if terminal:
             if winning_move(board, AI_PIECE):
-                return (None, 100000000000000)
-        elif winning_move(board, PLAYER_PIECE):
-            return (None, -100000000000000)
+                return (None, float("inf"))
+            elif winning_move(board, PLAYER_PIECE):
+                return (None, -float("inf"))
+            else:
+                return (None, 0)
         else:
-            # this branch means the game is over with no more valid moves (it's a draw)
-            return (None, 0)
+            # we still need to evaluate the non-terminal leaf
+            return (None, score_position(board, AI_PIECE))
 
     # now we need to split the game logic between maximizing player and minimizing player
     if maximizingPlayer:
@@ -121,14 +133,14 @@ def minimax(board, depth, alpha, beta, maximizingPlayer):
         best_col = random.choice(valid_locations)
         for col in valid_locations:
             row = get_next_open_row(board, col)
-            # recursion requires a copy of the board be made
-            temp_board = board.copy()
-            drop_piece(temp_board, row, col, AI_PIECE)
-            new_score = minimax(temp_board, depth - 1, alpha, beta, False)[1]
-            if new_score > value:
-                value = new_score
-                best_col = col
-            alpha = max(alpha, value)
+            if row is not None:
+                temp_board = board.copy()
+                drop_piece(temp_board, row, col, AI_PIECE)
+                new_score = minimax(temp_board, depth - 1, alpha, beta, False)[1]
+                if new_score > value:
+                    value = new_score
+                    best_col = col
+                alpha = max(alpha, value)
             if alpha >= beta:
                 break  # this is where the pruning happens
 
@@ -140,14 +152,14 @@ def minimax(board, depth, alpha, beta, maximizingPlayer):
         best_col = random.choice(valid_locations)
         for col in valid_locations:
             row = get_next_open_row(board, col)
-            # recursion requires a copy of the board be made
-            temp_board = board.copy()
-            drop_piece(temp_board, row, col, PLAYER_PIECE)
-            new_score = minimax(temp_board, depth - 1, alpha, beta, True)[1]
-            if new_score < value:
-                value = new_score
-                best_col = col
-            beta = min(beta, value)
+            if row is not None:
+                temp_board = board.copy()
+                drop_piece(temp_board, row, col, PLAYER_PIECE)
+                new_score = minimax(temp_board, depth - 1, alpha, beta, True)[1]
+                if new_score < value:
+                    value = new_score
+                    best_col = col
+                beta = min(beta, value)
             if alpha >= beta:
                 break  # another pruning situation
 

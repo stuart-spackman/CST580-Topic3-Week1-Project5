@@ -34,7 +34,21 @@ def is_valid_location(board, col):
     Returns true is a piece can be dropped in the given column.
     Columns are valid until the top cell is no longer zero.
     """
+    # bug correction: we need to add a check for column bounds
+    if col < 0 or col >= COLUMN_COUNT:
+        return False
+
     return board[ROW_COUNT - 1][col] == 0
+
+
+# bug correction: we need a function to get valid locations
+def get_valid_locations(board):
+    return [col for col in range(COLUMN_COUNT) if is_valid_location(board, col)]
+
+
+# bug correction: we might need an optional function for board copying
+def copy_board(board):
+    return board.copy()
 
 
 def get_next_open_row(board, col):
@@ -45,7 +59,7 @@ def get_next_open_row(board, col):
         if board[r][col] == 0:
             return r
 
-    return None  # shoudl not happen if this function is called after is_valid_location
+    return None  # should not happen if this function is called after is_valid_location
 
 
 def print_board(board):

@@ -17,12 +17,13 @@ SQUARE_SIZE = 100  # size of one cell in pixels
 RADIUS = int((SQUARE_SIZE / 2) - 5)
 
 # --- Calculated Screen Size ---
-width = COLUMN_COUNT * SQUARE_SIZE
-height = (ROW_COUNT + 1) * SQUARE_SIZE  # extra row for user input
-size = (width, height)
+WIDTH = COLUMN_COUNT * SQUARE_SIZE
+HEIGHT = (ROW_COUNT + 1) * SQUARE_SIZE  # extra row for user input
+SIZE = (WIDTH, HEIGHT)
 
-# font size
+# font size and name
 FONT_SIZE = 60
+FONT_NAME = "arial"
 
 # --- AI Settings ---
 MAX_DEPTH = 5  # search depth for the Minimax algorithm

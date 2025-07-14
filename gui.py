@@ -8,7 +8,7 @@ import pygame
 import sys
 import numpy as np
 from config import *
-from game_logic import ROW_COUNT, COLUMN_COUNT
+from minimax_ai import PLAYER_PIECE, AI_PIECE
 
 
 def draw_board(screen, board):
@@ -38,23 +38,23 @@ def draw_board(screen, board):
     # now we can draw the pieces
     for c in range(COLUMN_COUNT):
         for r in range(ROW_COUNT):
-            if board[r][c] == 1:
+            if board[r][c] == PLAYER_PIECE:
                 pygame.draw.circle(
                     screen,
                     RED,
                     (
                         int(c * SQUARE_SIZE + SQUARE_SIZE / 2),
-                        height - int(r * SQUARE_SIZE + SQUARE_SIZE / 2),
+                        HEIGHT - int(r * SQUARE_SIZE + SQUARE_SIZE / 2),
                     ),
                     RADIUS,
                 )
-            elif board[r][c] == 2:
+            elif board[r][c] == AI_PIECE:
                 pygame.draw.circle(
                     screen,
                     YELLOW,
                     (
                         int(c * SQUARE_SIZE + SQUARE_SIZE / 2),
-                        height - int(r * SQUARE_SIZE + SQUARE_SIZE / 2),
+                        HEIGHT - int(r * SQUARE_SIZE + SQUARE_SIZE / 2),
                     ),
                     RADIUS,
                 )

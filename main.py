@@ -19,10 +19,11 @@ from game_logic import (
     print_board,
 )
 from minimax_ai import minimax
+from minimax_ai import PLAYER_PIECE, AI_PIECE
 from gui import draw_board, show_winner
 
 pygame.init()
-screen = pygame.display.set_mode(size)
+screen = pygame.display.set_mode(SIZE)
 pygame.display.set_caption("Connect Four: Human vs. AI")
 font = pygame.font.SysFont("monospace", FONT_SIZE)
 
@@ -44,7 +45,7 @@ while not game_over:
 
         # draw the player's disc as hovering
         if event.type == pygame.MOUSEMOTION:
-            pygame.draw.rect(screen, BLACK, (0, 0, width, SQUARE_SIZE))
+            pygame.draw.rect(screen, BLACK, (0, 0, WIDTH, SQUARE_SIZE))
             posx = event.pos[0]
             pygame.draw.circle(screen, RED, (posx, int(SQUARE_SIZE / 2)), RADIUS)
             pygame.display.update()
@@ -52,16 +53,16 @@ while not game_over:
         # handle mouse click (player move)
         if event.type == pygame.MOUSEBUTTONDOWN and turn == 0:
             # first clear the hovering
-            pygame.draw.rect(screen, BLACK, (0, 0, width, SQUARE_SIZE))
+            pygame.draw.rect(screen, BLACK, (0, 0, WIDTH, SQUARE_SIZE))
 
             posx = event.pos[0]
-            col = int(posx, SQUARE_SIZE)
+            col = int(posx / SQUARE_SIZE)
 
             if is_valid_location(board, col):
                 row = get_next_open_row(board, col)
-                drop_piece(board, row, col, 1)
+                drop_piece(board, row, col, PLAYER_PIECE)
 
-                if winning_move(board, 1):
+                if winning_move(board, PLAYER_PIECE):
                     draw_board(screen, board)
                     show_winner(screen, font, "You win!!!", RED)
                     game_over = True
@@ -77,9 +78,9 @@ while not game_over:
 
         if is_valid_location(board, col):
             row = get_next_open_row(board, col)
-            drop_piece(board, row, col, 2)
+            drop_piece(board, row, col, AI_PIECE)
 
-            if winning_move(board, 2):
+            if winning_move(board, AI_PIECE):
                 draw_board(screen, board)
                 show_winner(screen, font, "Oh no, the AI won...", YELLOW)
                 game_over = True
